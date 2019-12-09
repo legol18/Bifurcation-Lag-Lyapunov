@@ -1,5 +1,5 @@
 import subprocess
-## do not forget changing the compiler name as per the availability
+## do not forget changing the compiler name as per availability
 commands = ['rm *.dat','rm fort.*',
 'gfortran dvode_f90_m.f90 lyap.f90 -o lyap',
 './lyap',

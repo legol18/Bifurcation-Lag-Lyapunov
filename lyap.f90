@@ -1,4 +1,4 @@
-   MODULE CLIMATE
+   MODULE SYS
    implicit none
    integer, parameter:: id=7, mlyap=2, NEQ=(mlyap+1)*id, idx1=2, idx2=3, idx3=4, idx4=5, idx5=6!! id is the system dimension, idx1, idx2 are signals to compare for lag
    integer, parameter:: npar=17, ntrans=100000, niter=100000, ntot=ntrans+niter, nhist=50000, imaxlag=niter/10 !! npar is number of system parameters, ntrans, niter are transient and iteration loop sizes
@@ -7,7 +7,7 @@
    
   CONTAINS
   
-     SUBROUTINE similarity(xx,yy,simfx)!! similarity function calculation, DO NOT TOUCH unless you REALLY know what you are doing!
+     SUBROUTINE similarity(xx,yy,simfx)!! similarity function calculation
      implicit none
      real(kind=8), intent(in):: xx(niter),yy(niter)
      real(kind=8), intent(out):: simfx(imaxlag)
@@ -84,6 +84,7 @@
 				*(y(3)+Kbp)/(y(3)+y(7)**n*y(4)+Kbp)**2))+(w/(y(7))**2)-(w/(1-y(7))**2) 													!Individual change in alpha
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! JACOBIAN   
+!! Jacobian
         jac(1,1)=(rbb*y(1)*y(3))/(Hbb + y(1))**2 - (rbb*y(3))/(Hbb + y(1)) - &
         &(rpb*y(2))/(Hpb + y(1)) - D + (rpb*y(1)*y(2))/(Hpb + y(1))**2 + &
         &(rmb*y(4)*(c-1.d0))/(Hmb + y(1)) - (rmb*y(1)*y(4)*(c-1.d0))/(Hmb + y(1))**2
@@ -225,7 +226,7 @@
       RETURN
       END SUBROUTINE DERIVS
 
-         SUBROUTINE gs(y,bnorm)
+         SUBROUTINE gs(y,bnorm) !! Gram-Schmidt orthonormalization
          implicit none
          real(kind=8),intent(inout):: y(NEQ), bnorm(mlyap)
          real(kind=8):: a(mlyap)
@@ -281,14 +282,14 @@
 
 !      END SUBROUTINE JACD
 
-    END MODULE CLIMATE
+    END MODULE SYS
 
 
 
 !******************************************************************
 
-    PROGRAM DEMOCLIMATE
-      USE CLIMATE
+    PROGRAM simSYS
+      USE SYS
       USE DVODE_F90_M
 !     Type declarations:
 
@@ -591,5 +592,5 @@
       WRITE (6,*) ISTATS(11), ISTATS(12), ISTATS(13)
 !     Format statements for this problem:
 
-END PROGRAM DEMOCLIMATE
+END PROGRAM simSYS
 
